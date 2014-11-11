@@ -15,7 +15,7 @@ function animate(){
 	lastTime = time;
 
 	var angleChange = angularSpeed * timeDiff * 2 * Math.PI / 1000;
-	cubeObject.rotation.y += angleChange;
+	cubeAndData.rotation.y += angleChange;
 
 	// render
 	renderer.render(scene, camera);
@@ -48,14 +48,53 @@ var crate_flap = new THREE.MeshLambertMaterial({
 	map: THREE.ImageUtils.loadTexture('textures/nd_crate_flap.png')
 });
 
+var cyl = new THREE.MeshLambertMaterial({
+	map: THREE.ImageUtils.loadTexture('textures/10.png'),
+	transparent: true,
+	opacity: 1
+});
+
+// cube, data, light
+var cubeAndData = new THREE.Object3D();
+
 // cube
 var cubeObject = new THREE.Object3D();
 
 var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), crate);
 cube.overdraw = true;
 
-cubeObject.add(cube);
-cubeObject.rotation.x = Math.PI * 0.1;
+//cubeObject.add(cube);
+//cubeObject.rotation.x = Math.PI * 0.1;
+
+// cube walls
+
+var cubeWall1 = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 1), crate);
+cubeWall1.overdraw = true;
+
+cubeWall1.translateZ(100);
+
+cubeObject.add(cubeWall1);
+
+var cubeWall2 = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 1), crate);
+cubeWall2.overdraw = true;
+
+cubeWall2.translateZ(-100);
+
+cubeObject.add(cubeWall2);
+
+var cubeWall3 = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 1), crate);
+cubeWall3.overdraw = true;
+cubeWall3.rotation.y += Math.PI/2;
+cubeWall3.translateZ(100);
+
+cubeObject.add(cubeWall3);
+
+var cubeWall4 = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 1), crate);
+cubeWall4.overdraw = true;
+cubeWall4.rotation.y += Math.PI/2;
+cubeWall4.translateZ(-100);
+
+cubeObject.add(cubeWall4);
 
 // box flaps
 var flapObject1 = new THREE.Object3D();
@@ -116,7 +155,17 @@ flapObject4.rotation.z += Math.PI/2;
 
 cubeObject.add(flapObject4);
 
-scene.add(cubeObject);
+cubeAndData.add(cubeObject);
+
+cubeAndData.rotation.x = Math.PI * 0.1;
+
+// cylinder
+var cylinder = new THREE.Mesh(new THREE.CylinderGeometry(150, 75, 300, 32, 1, true), cyl);
+cylinder.overdraw = true;
+cylinder.position.y += 200;
+//cylinder.rotation.x = 1;
+cubeAndData.add(cylinder);
+scene.add(cubeAndData);
 
 // add subtle ambient lighting
 var ambientLight = new THREE.AmbientLight(0xbbbbbb);
@@ -126,6 +175,30 @@ scene.add(ambientLight);
 var directionalLight = new THREE.DirectionalLight(0xffffff);
 directionalLight.position.set(1, 1, 1).normalize();
 scene.add(directionalLight);
+
+// point lighting
+
+//var pointlight = new THREE.PointLight( 0xffffff, 1, 100);
+//pointlight.position.set( 0, 100, 0);
+//scene.add(pointlight);
+
+// spotlight
+
+var spotLight = new THREE.SpotLight( 0xffffff );
+spotLight.position.set( 0, 100, 0 );
+
+spotLight.castShadow = true;
+
+spotLight.shadowMapWidth = 1024;
+spotLight.shadowMapHeight = 1024;
+
+spotLight.shadowCameraNear = 500;
+spotLight.shadowCameraFar = 4000;
+spotLight.shadowCameraFov = 30;
+
+spotLight.target.position.set(0, 500, 0);
+
+scene.add( spotLight );
 
 // start animation
 animate();
