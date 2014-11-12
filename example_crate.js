@@ -1,7 +1,10 @@
 // revolutions per second
 var angularSpeed = 0.15; 
 var lastTime = 0;
-var startTime = 0;
+var flap1close = true;
+var flap2close = true;
+var flap3close = true;
+var flap4close = true;
 
 // this function is executed on each animation frame
 function animate(){
@@ -9,14 +12,53 @@ function animate(){
 	var time = (new Date()).getTime();
 	var timeDiff = time - lastTime;
 
-	if(lastTime == 0) {
-		startTime = time;
-	}
 	lastTime = time;
 
 	var angleChange = angularSpeed * timeDiff * 2 * Math.PI / 1000;
 	cubeAndData.rotation.y += angleChange;
-
+	crashcart.rotation.x += angleChange;
+	
+	cube.rotation.x += .125;
+	cube.rotation.y += .125;
+	
+	// flap animations
+	
+	if ((flapObject1.rotation.y < Math.PI) && flap1close) {
+		flapObject1.rotation.y += .01;
+	} else if((flapObject1.rotation.y < -Math.PI/4) && !flap1close) {
+		flap1close = true;
+	} else {
+		flap1close = false;
+		flapObject1.rotation.y -= .01;
+	}
+	
+	if ((flapObject2.rotation.y > 0) && flap2close) {
+		flapObject2.rotation.y -= .01;
+	} else if((flapObject2.rotation.y > 5*Math.PI/4) && !flap2close) {
+		flap2close = true;
+	} else {
+		flap2close = false;
+		flapObject2.rotation.y += .01;
+	}
+	
+	if ((flapObject3.rotation.x > -Math.PI/2) && flap3close) {
+		flapObject3.rotation.x -= .01;
+	} else if((flapObject3.rotation.x > 3*Math.PI/4) && !flap3close) {
+		flap3close = true;
+	} else {
+		flap3close = false;
+		flapObject3.rotation.x += .01;
+	}
+	
+	if ((flapObject4.rotation.x < 5*Math.PI/2) && flap4close) {
+		flapObject4.rotation.x += .01;
+	} else if((flapObject4.rotation.x < 5*Math.PI/4) && !flap4close) {
+		flap4close = true;
+	} else {
+		flap4close = false;
+		flapObject4.rotation.x -= .01;
+	}
+	
 	// render
 	renderer.render(scene, camera);
 
@@ -33,8 +75,8 @@ document.body.appendChild(renderer.domElement);
 
 // camera
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
-camera.position.z = 500;
-//camera.position.z = 1100;
+//camera.position.z = 500;
+camera.position.z = 1100;
 
 // scene
 var scene = new THREE.Scene();
@@ -54,6 +96,18 @@ var cyl = new THREE.MeshLambertMaterial({
 	opacity: 1
 });
 
+var wheel = new THREE.MeshLambertMaterial({
+	map: THREE.ImageUtils.loadTexture('textures/962d64562c84.jpg')
+});
+
+var cart = new THREE.MeshLambertMaterial({
+	map: THREE.ImageUtils.loadTexture('textures/bluemetal1.jpg')
+});
+
+var crashbodycolor = new THREE.MeshLambertMaterial({
+	color: 'orange'
+});
+
 // cube, data, light
 var cubeAndData = new THREE.Object3D();
 
@@ -62,8 +116,9 @@ var cubeObject = new THREE.Object3D();
 
 var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), crate);
 cube.overdraw = true;
+//cube.position.x -= 200;
 
-//cubeObject.add(cube);
+cubeObject.add(cube);
 //cubeObject.rotation.x = Math.PI * 0.1;
 
 // cube walls
@@ -166,6 +221,70 @@ cylinder.position.y += 200;
 //cylinder.rotation.x = 1;
 cubeAndData.add(cylinder);
 scene.add(cubeAndData);
+
+var crashcart = new THREE.Object3D();
+
+var wheel1 = new THREE.Mesh(new THREE.CylinderGeometry(25, 25, 25, 16, 1, false), wheel);
+wheel1.overdraw = true;
+wheel1.position.y += 35;
+wheel1.position.x += 50;
+//wheel1.position.y += 300;
+//wheel1.rotation.z += Math.PI/2;
+crashcart.add(wheel1);
+
+var wheel2 = new THREE.Mesh(new THREE.CylinderGeometry(25, 25, 25, 16, 1, false), wheel);
+wheel2.overdraw = true;
+wheel2.position.y += 35;
+wheel2.position.x -= 50;
+//wheel2.position.y += 250;
+//wheel2.rotation.z += Math.PI/2;
+crashcart.add(wheel2);
+
+var wheel3 = new THREE.Mesh(new THREE.CylinderGeometry(25, 25, 25, 16, 1, false), wheel);
+wheel3.overdraw = true;
+wheel3.position.y -= 35;
+wheel3.position.x += 50;
+//wheel3.position.y += 200;
+//wheel3.rotation.z += Math.PI/2;
+crashcart.add(wheel3);
+
+var wheel4 = new THREE.Mesh(new THREE.CylinderGeometry(25, 25, 25, 16, 1, false), wheel);
+wheel4.overdraw = true;
+wheel4.position.y -= 35;
+wheel4.position.x -= 50;
+//wheel4.position.y += 150;
+//wheel4.rotation.z += Math.PI/2;
+crashcart.add(wheel4);
+
+var cartbase = new THREE.Mesh(new THREE.CubeGeometry(100, 75, 15), cart);
+cartbase.overdraw = true;
+//cartbase.position.x += 200;
+crashcart.add(cartbase);
+
+var crash = new THREE.Object3D();
+
+var body = new THREE.Mesh(new THREE.CylinderGeometry(10, 25, 75, 16, 1, false), crashbodycolor);
+body.overdraw = true;
+body.rotation.x += Math.PI/2;
+body.position.z += 75/2;
+
+crash.add(body);
+/*
+var head = new THREE.Mesh(new THREE.CircleGeometry(50, 16, 0, 2*Math.PI), crashbodycolor);
+head.overdraw = true;
+head.position.z += 100;
+
+crash.add(head);
+*/
+//crash.position.x += 200;
+
+crashcart.add(crash);
+
+crashcart.rotation.x -= Math.PI/2;
+crashcart.position.x += 200;
+
+scene.add(crashcart);
+
 
 // add subtle ambient lighting
 var ambientLight = new THREE.AmbientLight(0xbbbbbb);
