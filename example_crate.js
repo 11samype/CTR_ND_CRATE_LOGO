@@ -1,6 +1,5 @@
 // revolutions per second
-var angularSpeed = 0.15; 
-var lastTime = 0;
+
 var flap1close = true;
 var flap2close = true;
 var flap3close = true;
@@ -9,14 +8,9 @@ var flap4close = true;
 // this function is executed on each animation frame
 function animate(){
 	// update
-	var time = (new Date()).getTime();
-	var timeDiff = time - lastTime;
 
-	lastTime = time;
-
-	var angleChange = angularSpeed * timeDiff * 2 * Math.PI / 1000;
-	cubeAndData.rotation.y += angleChange;
-	crashcart.rotation.x += angleChange;
+	//cubeAndData.rotation.y += .01;
+	crashcart.rotation.x += .03;
 	
 	cube.rotation.x += .125;
 	cube.rotation.y += .125;
@@ -25,40 +19,31 @@ function animate(){
 	
 	if ((flapObject1.rotation.y < Math.PI) && flap1close) {
 		flapObject1.rotation.y += .01;
+		flapObject2.rotation.y -= .01;
+		flapObject3.rotation.x -= .01;
+		flapObject4.rotation.x += .01;
+		
+		cubeAndData.rotation.y += .02;
+		
+		camera.position.z -= 2.18;
+		camera.position.y += .02;
+		cubeAndData.rotation.x -= 0.0008;
+
 	} else if((flapObject1.rotation.y < -Math.PI/4) && !flap1close) {
 		flap1close = true;
 	} else {
 		flap1close = false;
 		flapObject1.rotation.y -= .01;
-	}
-	
-	if ((flapObject2.rotation.y > 0) && flap2close) {
-		flapObject2.rotation.y -= .01;
-	} else if((flapObject2.rotation.y > 5*Math.PI/4) && !flap2close) {
-		flap2close = true;
-	} else {
-		flap2close = false;
 		flapObject2.rotation.y += .01;
-	}
-	
-	if ((flapObject3.rotation.x > -Math.PI/2) && flap3close) {
-		flapObject3.rotation.x -= .01;
-	} else if((flapObject3.rotation.x > 3*Math.PI/4) && !flap3close) {
-		flap3close = true;
-	} else {
-		flap3close = false;
 		flapObject3.rotation.x += .01;
-	}
-	
-	if ((flapObject4.rotation.x < 5*Math.PI/2) && flap4close) {
-		flapObject4.rotation.x += .01;
-	} else if((flapObject4.rotation.x < 5*Math.PI/4) && !flap4close) {
-		flap4close = true;
-	} else {
-		flap4close = false;
 		flapObject4.rotation.x -= .01;
+		
+		camera.position.z += 2.18;
+		camera.position.y -= .02;
+		cubeAndData.rotation.x += 0.0008;
+
 	}
-	
+
 	// render
 	renderer.render(scene, camera);
 
