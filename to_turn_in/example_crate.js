@@ -129,29 +129,29 @@ var scene = new THREE.Scene();
 
 // texture
 var crate = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('textures/nd_crate.png')
+	map: THREE.ImageUtils.loadTexture('nd_crate.png')
 });
 
 var crate_flap = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('textures/nd_crate_flap.png')
+	map: THREE.ImageUtils.loadTexture('nd_crate_flap.png')
 });
 
 var cyl = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('textures/10.png'),
+	map: THREE.ImageUtils.loadTexture('10.png'),
 	transparent: true,
 	opacity: 1
 });
 
 var wheel = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('textures/962d64562c84.jpg')
+	map: THREE.ImageUtils.loadTexture('962d64562c84.jpg')
 });
 
 var cart = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('textures/bluemetal1.jpg')
+	map: THREE.ImageUtils.loadTexture('bluemetal1.jpg')
 });
 
 var crashbodycolor = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('textures/orangefur.jpg')
+	map: THREE.ImageUtils.loadTexture('orangefur.jpg')
 });
 
 var crashnosecolor = new THREE.MeshBasicMaterial({
@@ -369,7 +369,7 @@ scene.add(directionalLight);
 // make background
 var bg = new THREE.Mesh(
 	new THREE.PlaneBufferGeometry(2, 2, 0),
-	new THREE.MeshBasicMaterial({map:THREE.ImageUtils.loadTexture('textures/space-5.jpg')})
+	new THREE.MeshBasicMaterial({map:THREE.ImageUtils.loadTexture('space-5.jpg')})
 );
 
 // The bg plane shouldn't care about the z-buffer.
