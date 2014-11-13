@@ -11,7 +11,7 @@ function animate(){
 	// update
 
 	//cubeAndData.rotation.y += .01;
-	crashcart.rotation.x += .03;
+	//crashcart.rotation.x += .03;
 
 	upsideDownCube.rotation.y += .1;
 	
@@ -67,12 +67,48 @@ function animate(){
 			crateFlyOut = true;
 			scene.remove(cube);
 			scene.add(upsideDownCube);
+			scene.add(crashcart);
 		}
 	}
 	
 	if (crateFlyOut) {
-		scene.add(crashcart);
 		upsideDownCube.position.y += 5;
+		crashcart.position.y -= 3;
+		crashcart.position.z += 9;
+		
+		if (crashcart.position.z > camera.position.z) {
+			//reset
+			scene.remove(crashcart);
+			scene.remove(upsideDownCube);
+			
+			camera.position.x = 0;
+			camera.position.y = 0;
+			camera.position.z = 1100;
+			
+			cube.position.x = 0;
+			cube.position.y = 0;
+			cube.position.z = 0;
+			
+			cubeAndData.position.x = 0;
+			cubeAndData.position.y = 0;
+			cubeAndData.position.z = 0;
+			
+			flapObject1.rotation.y = -Math.PI/4;
+			flapObject2.rotation.y = 5*Math.PI/4;
+			flapObject3.rotation.x = 3*Math.PI/4;
+			flapObject4.rotation.x = 5*Math.PI/4;
+			
+			cubeAndData.rotation.x = Math.PI * 0.1;
+			
+			upsideDownCube.position.x = 0;
+			upsideDownCube.position.y = 0;
+			upsideDownCube.position.z = 0;
+			
+			crateFlyOut = false;
+			flap1close = true;
+			
+			scene.add(cubeAndData);
+		}
 	}
 
 	// render
@@ -309,7 +345,8 @@ crash.add(head);
 
 crashcart.add(crash);
 
-crashcart.rotation.x -= Math.PI/2;
+crashcart.rotation.x = -Math.PI/4;
+crashcart.rotation.z = -Math.PI/2;
 //crashcart.position.x += 200;
 
 //scene.add(crashcart);
