@@ -4,6 +4,7 @@ var flap1close = true;
 var flap2close = true;
 var flap3close = true;
 var flap4close = true;
+var crateFlyOut = false;
 
 // this function is executed on each animation frame
 function animate(){
@@ -11,9 +12,8 @@ function animate(){
 
 	//cubeAndData.rotation.y += .01;
 	crashcart.rotation.x += .03;
-	
-	cube.rotation.x += .125;
-	cube.rotation.y += .125;
+
+	upsideDownCube.rotation.y += .1;
 	
 	// flap animations
 	
@@ -30,18 +30,49 @@ function animate(){
 		cubeAndData.rotation.x -= 0.0008;
 
 	} else if((flapObject1.rotation.y < -Math.PI/4) && !flap1close) {
-		flap1close = true;
+		//flap1close = true;
 	} else {
+		if (flap1close) {
+			scene.remove(cubeAndData);
+			scene.add(cube);
+		}
+		
 		flap1close = false;
+		/*
 		flapObject1.rotation.y -= .01;
 		flapObject2.rotation.y += .01;
 		flapObject3.rotation.x += .01;
 		flapObject4.rotation.x -= .01;
 		
-		camera.position.z += 2.18;
-		camera.position.y -= .02;
+		cubeAndData.rotation.y -= .02;
+		
 		cubeAndData.rotation.x += 0.0008;
-
+		*/
+		if (!crateFlyOut) {
+			camera.position.z += 2.18;
+			camera.position.y -= .5;
+		}
+		
+		
+		
+		
+	}
+	
+	if (!flap1close && !crateFlyOut) {
+		
+		cube.rotation.x += .04;
+		cube.rotation.y += .04;
+		
+		if (camera.position.z > 1100) {
+			crateFlyOut = true;
+			scene.remove(cube);
+			scene.add(upsideDownCube);
+		}
+	}
+	
+	if (crateFlyOut) {
+		scene.add(crashcart);
+		upsideDownCube.position.y += 5;
 	}
 
 	// render
@@ -103,7 +134,7 @@ var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), crate);
 cube.overdraw = true;
 //cube.position.x -= 200;
 
-cubeObject.add(cube);
+//cubeObject.add(cube);
 //cubeObject.rotation.x = Math.PI * 0.1;
 
 // cube walls
@@ -148,8 +179,8 @@ flapObject1.add(flap1);
 flapObject1.translateX(100);
 flapObject1.translateY(100);
 
-flapObject1.rotation.x += Math.PI/2;
-flapObject1.rotation.y -= Math.PI/4;
+flapObject1.rotation.x = Math.PI/2;
+flapObject1.rotation.y = Math.PI/4;
 
 cubeObject.add(flapObject1);
 
@@ -162,8 +193,8 @@ flap2.applyMatrix( new THREE.Matrix4().makeTranslation( 50, 0, 0 ));
 flapObject2.add(flap2);
 flapObject2.translateX(-100);
 flapObject2.translateY(100);
-flapObject2.rotation.x += Math.PI/2;
-flapObject2.rotation.y += 5*Math.PI/4;
+flapObject2.rotation.x = Math.PI/2;
+flapObject2.rotation.y = 3*Math.PI/4;
 
 cubeObject.add(flapObject2);
 
@@ -176,8 +207,8 @@ flap3.applyMatrix( new THREE.Matrix4().makeTranslation( 50, 0, 0 ));
 flapObject3.add(flap3);
 flapObject3.translateY(100);
 flapObject3.translateZ(100);
-flapObject3.rotation.x += 3*Math.PI/4;
-flapObject3.rotation.z += Math.PI/2;
+flapObject3.rotation.x = Math.PI/4;
+flapObject3.rotation.z = Math.PI/2;
 
 cubeObject.add(flapObject3);
 
@@ -190,14 +221,27 @@ flap4.applyMatrix( new THREE.Matrix4().makeTranslation( 50, 0, 0 ));
 flapObject4.add(flap4);
 flapObject4.translateY(100);
 flapObject4.translateZ(-100);
-flapObject4.rotation.x += 5*Math.PI/4;
-flapObject4.rotation.z += Math.PI/2;
+flapObject4.rotation.x = 7*Math.PI/4;
+flapObject4.rotation.z = Math.PI/2;
 
 cubeObject.add(flapObject4);
 
 cubeAndData.add(cubeObject);
 
 cubeAndData.rotation.x = Math.PI * 0.1;
+
+var upsideDownCube = cubeObject.clone();
+
+// bend flaps for original cube
+flapObject1.rotation.y = -Math.PI/4;
+flapObject2.rotation.y = 5*Math.PI/4;
+flapObject3.rotation.x = 3*Math.PI/4;
+flapObject4.rotation.x = 5*Math.PI/4;
+
+//upsideDownCube.position.x += 200;
+upsideDownCube.rotation.x += Math.PI;
+
+//scene.add(upsideDownCube);
 
 // cylinder
 var cylinder = new THREE.Mesh(new THREE.CylinderGeometry(150, 75, 300, 32, 1, true), cyl);
@@ -266,9 +310,9 @@ crash.add(head);
 crashcart.add(crash);
 
 crashcart.rotation.x -= Math.PI/2;
-crashcart.position.x += 200;
+//crashcart.position.x += 200;
 
-scene.add(crashcart);
+//scene.add(crashcart);
 
 
 // add subtle ambient lighting
