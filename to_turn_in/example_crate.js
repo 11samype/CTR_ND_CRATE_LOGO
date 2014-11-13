@@ -1,9 +1,6 @@
 // revolutions per second
 
 var flap1close = true;
-var flap2close = true;
-var flap3close = true;
-var flap4close = true;
 var crateFlyOut = false;
 
 // this function is executed on each animation frame
@@ -125,7 +122,6 @@ document.body.appendChild(renderer.domElement);
 
 // camera
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
-//camera.position.z = 500;
 camera.position.z = 1100;
 
 // scene
@@ -133,33 +129,37 @@ var scene = new THREE.Scene();
 
 // texture
 var crate = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('nd_crate.png')
+	map: THREE.ImageUtils.loadTexture('textures/nd_crate.png')
 });
 
 var crate_flap = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('nd_crate_flap.png')
+	map: THREE.ImageUtils.loadTexture('textures/nd_crate_flap.png')
 });
 
 var cyl = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('10.png'),
+	map: THREE.ImageUtils.loadTexture('textures/10.png'),
 	transparent: true,
 	opacity: 1
 });
 
 var wheel = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('962d64562c84.jpg')
+	map: THREE.ImageUtils.loadTexture('textures/962d64562c84.jpg')
 });
 
 var cart = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('bluemetal1.jpg')
+	map: THREE.ImageUtils.loadTexture('textures/bluemetal1.jpg')
 });
 
 var crashbodycolor = new THREE.MeshLambertMaterial({
-	map: THREE.ImageUtils.loadTexture('orangefur.jpg')
+	map: THREE.ImageUtils.loadTexture('textures/orangefur.jpg')
 });
 
 var crashnosecolor = new THREE.MeshBasicMaterial({
 	color: 'black'
+});
+
+var light = new THREE.MeshBasicMaterial({
+	color: 'white'
 });
 
 // cube, data, light
@@ -168,33 +168,41 @@ var cubeAndData = new THREE.Object3D();
 // cube
 var cubeObject = new THREE.Object3D();
 
-var cube = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 200), crate);
+var cube = new THREE.Mesh(new THREE.BoxGeometry(200, 200, 200), crate);
 cube.overdraw = true;
 
 // cube walls
 
-var cubeWall1 = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 1), crate);
+var cubeWall1 = new THREE.Mesh(new THREE.BoxGeometry(200, 200, 1), crate);
 cubeWall1.overdraw = true;
 
 cubeWall1.translateZ(100);
 
 cubeObject.add(cubeWall1);
 
-var cubeWall2 = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 1), crate);
+var innerWall1 = new THREE.Mesh(new THREE.PlaneBufferGeometry(200, 200), light);
+innerWall1.overdraw = true;
+
+innerWall1.translateY(100);
+innerWall1.rotation.x += 3*Math.PI/2;
+
+cubeObject.add(innerWall1);
+
+var cubeWall2 = new THREE.Mesh(new THREE.BoxGeometry(200, 200, 1), crate);
 cubeWall2.overdraw = true;
 
 cubeWall2.translateZ(-100);
 
 cubeObject.add(cubeWall2);
 
-var cubeWall3 = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 1), crate);
+var cubeWall3 = new THREE.Mesh(new THREE.BoxGeometry(200, 200, 1), crate);
 cubeWall3.overdraw = true;
 cubeWall3.rotation.y += Math.PI/2;
 cubeWall3.translateZ(100);
 
 cubeObject.add(cubeWall3);
 
-var cubeWall4 = new THREE.Mesh(new THREE.CubeGeometry(200, 200, 1), crate);
+var cubeWall4 = new THREE.Mesh(new THREE.BoxGeometry(200, 200, 1), crate);
 cubeWall4.overdraw = true;
 cubeWall4.rotation.y += Math.PI/2;
 cubeWall4.translateZ(-100);
@@ -204,7 +212,7 @@ cubeObject.add(cubeWall4);
 // box flaps
 var flapObject1 = new THREE.Object3D();
 
-var flap1 = new THREE.Mesh(new THREE.CubeGeometry(100, 200, 1), crate_flap);
+var flap1 = new THREE.Mesh(new THREE.BoxGeometry(100, 200, 1), crate_flap);
 flap1.overdraw = true;
 flap1.applyMatrix( new THREE.Matrix4().makeTranslation( 50, 0, 0 ));
 
@@ -220,7 +228,7 @@ cubeObject.add(flapObject1);
 
 var flapObject2 = new THREE.Object3D();
 
-var flap2 = new THREE.Mesh(new THREE.CubeGeometry(100, 200, 1), crate_flap);
+var flap2 = new THREE.Mesh(new THREE.BoxGeometry(100, 200, 1), crate_flap);
 flap2.overdraw = true;
 flap2.applyMatrix( new THREE.Matrix4().makeTranslation( 50, 0, 0 ));
 
@@ -234,7 +242,7 @@ cubeObject.add(flapObject2);
 
 var flapObject3 = new THREE.Object3D();
 
-var flap3 = new THREE.Mesh(new THREE.CubeGeometry(100, 200, 1), crate_flap);
+var flap3 = new THREE.Mesh(new THREE.BoxGeometry(100, 200, 1), crate_flap);
 flap3.overdraw = true;
 flap3.applyMatrix( new THREE.Matrix4().makeTranslation( 50, 0, 0 ));
 
@@ -248,7 +256,7 @@ cubeObject.add(flapObject3);
 
 var flapObject4 = new THREE.Object3D();
 
-var flap4 = new THREE.Mesh(new THREE.CubeGeometry(100, 200, 1), crate_flap);
+var flap4 = new THREE.Mesh(new THREE.BoxGeometry(100, 200, 1), crate_flap);
 flap4.overdraw = true;
 flap4.applyMatrix( new THREE.Matrix4().makeTranslation( 50, 0, 0 ));
 
@@ -307,7 +315,7 @@ wheel4.position.y -= 35;
 wheel4.position.x -= 50;
 crashcart.add(wheel4);
 
-var cartbase = new THREE.Mesh(new THREE.CubeGeometry(100, 75, 15), cart);
+var cartbase = new THREE.Mesh(new THREE.BoxGeometry(100, 75, 15), cart);
 cartbase.overdraw = true;
 crashcart.add(cartbase);
 
@@ -360,7 +368,7 @@ scene.add(directionalLight);
 
 // make background
 var bg = new THREE.Mesh(
-	new THREE.PlaneGeometry(2, 2, 0),
+	new THREE.PlaneBufferGeometry(2, 2, 0),
 	new THREE.MeshBasicMaterial({map:THREE.ImageUtils.loadTexture('textures/space-5.jpg')})
 );
 
