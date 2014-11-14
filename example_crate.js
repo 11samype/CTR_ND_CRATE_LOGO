@@ -91,6 +91,8 @@ function animate(){
 			flapObject4.rotation.x = 5*Math.PI/4;
 			
 			cubeAndData.rotation.x = Math.PI * 0.1;
+			cubeAndData.rotation.y = 0;
+			cubeAndData.rotation.z = 0;
 			
 			upsideDownCube.position.x = 0;
 			upsideDownCube.position.y = 0;
